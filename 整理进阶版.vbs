@@ -61,10 +61,10 @@ Function GetFileType(fileExt)
             GetFileType = "压缩文件"
         Case "exe"
             GetFileType = "可执行文件"
-        Case "ini"
-            GetFileType = "配置文件"
-        Case "vbs"
-            GetFileType = "VBScript脚本文件"
+        ' Case "ini"
+            ' GetFileType = "配置文件"
+        ' Case "vbs"
+            ' GetFileType = "VBScript脚本文件"
         Case "bat"
             GetFileType = "批处理文件"
         Case "lnk"
@@ -97,6 +97,7 @@ Function GetFileType(fileExt)
             GetFileType = "SQL文件"
         Case "csv"
             GetFileType = "CSV文件"
+            ' 添加更多文件类型的判断
         Case Else
             GetFileType = "其他文件"
     End Select
