@@ -1,4 +1,4 @@
-﻿import os
+import os
 import tkinter as tk
 import time
 
