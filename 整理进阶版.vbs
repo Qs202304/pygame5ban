@@ -106,10 +106,6 @@ Function GetFileType(fileExt)
             GetFileType = "C++源文件"
         Case "c"
             GetFileType = "C语言文件"
-        Case "h"
-            GetFileType = "C语言头文件"
-        Case "cpp"
-            GetFileType = "C语言源文件"
         Case "cs"
             GetFileType = "C#文件"
         Case "php"
@@ -118,6 +114,11 @@ Function GetFileType(fileExt)
             GetFileType = "ASP文件"
         Case "aspx"
             GetFileType = "ASP.NET文件"
+            ' 添加更多不常用文件类型的判断
+        Case "pyc"
+            GetFileType = "Python字节码文件"
+        Case "jar"
+            GetFileType = "Java Archive文件"
         Case Else
             GetFileType = "其他文件"
     End Select
@@ -127,7 +128,7 @@ For Each file in files
     fileType = LCase(fso.GetExtensionName(file))
     ' 忽略快捷方式、脚本文件以及指定的文件类型
     If fileType <> "lnk" And LCase(file.Name) <> LCase(scriptName) And _
-       fileType <> "exe" And fileType <> "ini" And fileType <> "vbs" And fileType <> "bat" Then
+       fileType <> "ini" And fileType <> "vbs" Then
         ' 使用GetFileType函数来获取文件类型
         Dim groupType
         groupType = GetFileType(fileType)
