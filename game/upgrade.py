@@ -156,6 +156,19 @@ def magicatk(data,user):
     if n>=0 and n<=count2:
         return available[n+1]
         
-i = readfile()
+# atkalive用于输出存活队员，并随机决定谁被攻击
+def atkalive(data,group):
+    randatk = random.randint(1,alivecount(data,group))
+    name = alive(data,group)
+    beatked = name[int(2*randatk+1)]
+    return beatked
 
-print(magicatk(i,0))
+# groupselect用于判断队员在哪个组
+def groupselect(user):
+    if user<=11:
+        return 0
+    elif user>11 and user<=26:
+        return 1
+    else:
+        return "非法"
+    
