@@ -19,6 +19,11 @@ def randval(type):
 def readfile():
     file = open("settings.txt", "r")
     lines = file.readlines()
+    # 去除换行符
+    for i in range(len(lines)):
+        lines[i] = lines[i].replace("\n", "")
+    file.close()
+    # 返回一个列表，列表中的元素是settings.txt文件中每一行的内容
     return lines
 
 # Writefile用于将新的属性值写入settings.txt文件
@@ -92,10 +97,7 @@ i = [str(i) for i in i]
 
 i = readfile()
 
-changeval(i,1)
+i = changeval(i,1)
 
 writefile(i)
-
-print(i)
-
 # 读取文件 

@@ -1,4 +1,5 @@
 import random
+import os
 
 def randhp():
     return random.randint(150, 300)
@@ -81,3 +82,5 @@ elif hp1 <= 0 and hp2 > 0:
     print(player2 + "击败了" + player1 + "！")
 else:    #hp1和hp2都小于等于0
     print("平局！")
+
+os.system("pause")
