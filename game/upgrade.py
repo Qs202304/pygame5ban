@@ -88,16 +88,74 @@ def changeval(data,type):
     return data
 
 # alive用于判定并输出存活名单供用户选择
-#def alive(data,group):
-#    if group == 0:
-#        idnum = [0,5,10,15,20,25]
-i = range(30)
-#将i中元素全部转化为字符串
-i = [str(i) for i in i]
+def alive(data,group):
+    if group == 0:
+        idnum = [0,5,10]
+    if group == 1:
+        idnum = [15,20,25]
+    else:
+        print("非法")
+    for i in idnum:
+        if data[i] != "Down":
+            alivename = []
+            alivename.append(data[i])
+            alivename.append(i)
+    return alivename
 
+# alivecount用于判定并输出存活人数
+def alivecount(data,group):
+    if group == 0:
+        idnum = [0,5,10]
+    if group == 1:
+        idnum = [15,20,25]
+    else:
+        print("非法")
+    for i in idnum:
+        if data[i] != "Down":
+            count += 1
+            
+    return count
+
+# aliveshowandselect用于输出存活名单供用户选择
+def aliveshowandselect(data,group):
+    s = alivecount(data,group)
+    t = alive(data,group)
+    print("选择出战队员：")
+    for i in range(s):
+        print(i,"：",t[2*i])
+    n = int(input("请输入编号："))
+    number = t[n+1]
+    return number
+
+# ifisdead用于判定是否死亡，并将死亡队员改为Down
+def ifisdead(data):
+    hp=[1,6,11,16,21,26]
+    for i in hp:
+        if data[i] <= 0:
+            if data[i-1] != "Down":
+                print(data[i-1],"队员死亡")
+                data[i-1] = "Down"
+                data[i] = 0
+
+# magicatk用于选择法术攻击
+def magicatk(data,user):
+    magickind = [15,"火球术",20,"闪电术",30,"冰冻术",40,"治疗术",70,"复活术"]
+    count = [1,3,5,7,9]
+    count2 = 0
+    available = []
+    for i in range(5):
+        num = count[i]
+        if magickind[num-1]<=int(data[user+4]):
+            available.append(magickind[num])
+            available.append(magickind[num-1])
+            count2 = count2 + 1
+    print("选择你的法术：")
+    for i in range(count2):
+        print(i,"：",available[2*i],"，消耗",available[2*i+1],"点法力")
+    n = int(input("请输入编号："))
+    if n>=0 and n<=count2:
+        return available[n+1]
+        
 i = readfile()
 
-i = changeval(i,1)
-
-writefile(i)
-# 读取文件 
+print(magicatk(i,0))
