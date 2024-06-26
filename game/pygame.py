@@ -1,7 +1,7 @@
 import random
 
 def randhp():
-    return random.randint(100, 200)
+    return random.randint(150, 300)
 
 def displayprocess(fplayer,splayer):
     # 为攻击方式添加1-5的随机数
