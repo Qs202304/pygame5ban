@@ -136,6 +136,8 @@ def ifisdead(data):
                 print(data[i-1],"队员死亡")
                 data[i-1] = "Down"
                 data[i] = 0
+                
+    return data
 
 # magicatk用于选择法术攻击
 def magicatk(data,user):
