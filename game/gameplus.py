@@ -166,7 +166,7 @@ def magicatk(data,user):
 def atkalive(data,group):
     randatk = random.randint(1,alivecount(data,group))
     name = alive(data,group)
-    beatked = name[int(2*randatk+1)]
+    beatked = name[int(2*randatk)-1]
     return beatked
 
 # groupselect用于判断队员在哪个组
@@ -197,6 +197,7 @@ def easter(data,user,olddata):
     else:
         print("非法")
     eastername = []
+    count = 0
     for i in num:
         if data[i] == "Down":
             eastername.append(olddata[i])
@@ -215,6 +216,10 @@ def easter(data,user,olddata):
 
 i = readfile()
 
-i = changeval(i,1)
+oldi = i
 
-writefile(i)
+i[0] = "Down"
+i[5] = "Down"
+
+i = easter(i,0,oldi)
+
