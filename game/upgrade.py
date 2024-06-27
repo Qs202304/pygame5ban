@@ -87,29 +87,32 @@ def changeval(data,type):
         data = "非法"
     return data
 
-# alive用于判定并输出存活名单供用户选择
-def alive(data,group):
-    if group == 0:
+# whichgroup用于判断组别
+def whichgroup(group):
+    gp = str(group)
+    if gp == "0":
         idnum = [0,5,10]
-    if group == 1:
+    elif gp == "1":
         idnum = [15,20,25]
     else:
-        print("非法")
+        print("error")
+    return idnum
+
+# alive用于判定并输出存活名单供用户选择
+def alive(data,group):
+    idnum = whichgroup(group)
+    alivename = []
     for i in idnum:
         if data[i] != "Down":
-            alivename = []
             alivename.append(data[i])
             alivename.append(i)
     return alivename
 
 # alivecount用于判定并输出存活人数
 def alivecount(data,group):
-    if group == 0:
-        idnum = [0,5,10]
-    if group == 1:
-        idnum = [15,20,25]
-    else:
-        print("非法")
+    gp = str(group)
+    idnum = whichgroup(group)
+    count = 0
     for i in idnum:
         if data[i] != "Down":
             count += 1
@@ -118,8 +121,9 @@ def alivecount(data,group):
 
 # aliveshowandselect用于输出存活名单供用户选择
 def aliveshowandselect(data,group):
-    s = alivecount(data,group)
-    t = alive(data,group)
+    gp = str(group)
+    s = alivecount(data,str(gp))
+    t = alive(data,str(gp))
     print("选择出战队员：")
     for i in range(s):
         print(i,"：",t[2*i])
@@ -173,4 +177,44 @@ def groupselect(user):
         return 1
     else:
         return "非法"
-    
+
+# ifalldead用于判断是否有一队全部死亡
+def ifalldead(data):
+    if data[0] == "Down" and data[5] == "Down" and data[10] == "Down":
+        return 0
+    elif data[15] == "Down" and data[20] == "Down" and data[25] == "Down":
+        return 1
+    else:
+        return False
+
+# easter用于法术复活队员
+# 切记要在编辑主战斗时备份一份data为olddata!!!
+def easter(data,user,olddata):
+    if groupselect(user) == 0:
+        num = [0,5,10]
+    elif groupselect(user) == 1:
+        num = [15,20,25]
+    else:
+        print("非法")
+    eastername = []
+    for i in num:
+        if data[i] == "Down":
+            eastername.append(olddata[i])
+            eastername.append(i)
+            count += 1
+            
+    print("选择复活队员：")
+    for i in range(count):
+        print(i,"：",eastername[2*i])
+    n = int(input("请输入编号："))
+    number = eastername[n+1]
+    data[number] = olddata[number]
+    print(eastername[2*n],"复活成功")
+    return data
+
+
+i = readfile()
+
+i = changeval(i,1)
+
+writefile(i)
