@@ -215,5 +215,53 @@ def easter(data,user,olddata):
 
 # 以下为战斗函数
 # 切记要在编辑主战斗时备份一份data为olddata!!!
-def mainfight(data,group):
+def mainfight(data,group,olddata):
+    fid = aliveshowandselect(data,group)
+    fid = int(fid)
+    if group == "0":
+        sgroup = "1"
+    elif group == "1":
+        sgroup = "0"
+    else:
+        print("非法")
+    sid = atkalive(data,sgroup)
+    fname = data[fid]
+    sname = data[sid]
+    # point决定类型
+    point = random.randint(1, 5)
+    if point == 1:
+        announce = fname + "使用烟锤冲击，" + sname + "被击中了！失血"+data[fid+1]+"点"
+        data[sid+1] = int(data[sid+1]) - int(data[fid+2])
+    elif point == 2:
+        announce = fname + "使用脉冲轰炸，" + sname + "被击中了！失血"+data[fid+2]+"点"
+        data[sid+1] = int(data[sid+1]) - int(data[fid+3])
+    elif point == 3:
+        announce = fname + "看错了，使用了一记无用功，" + sname + "毫发无伤！"
+    elif point == 4:
+        announce = fname + "手下留情，没有使用招术，" + sname + "拱手感谢！"
+    elif point == 5:
+        announce = fname + "使出绝招，使用法术"
+        # 再次用1-2随机数判断是自杀还是攻击
+        expoint = magicatk(data,fid)
+        if expoint == 15:
+            announce += "火球术！"
+            data[sid+1] = int(data[sid+1]) - 50
+        elif expoint == 70:
+            announce += "复活术！"
+            data = easter(data,fid,olddata)
+        elif expoint == 20:
+            announce += "闪电术！"
+            data[sid+1] = int(data[sid+1]) - 100
+        elif expoint == 40:
+            announce += "治疗术！"
+            data[fid+1] = int(data[fid+1]) + 100
+        elif expoint == 30:
+            announce += "冰冻术！"
+        else:
+            print("出错了！")
+            return 0
+    else:
+        print("出错了！")
+        return 0
+    print(announce)
     
