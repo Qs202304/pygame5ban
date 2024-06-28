@@ -213,13 +213,3 @@ def easter(data,user,olddata):
     print(eastername[2*n],"复活成功")
     return data
 
-
-i = readfile()
-
-oldi = i
-
-i[0] = "Down"
-i[5] = "Down"
-
-i = easter(i,0,oldi)
-
