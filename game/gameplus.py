@@ -213,3 +213,5 @@ def easter(data,user,olddata):
     print(eastername[2*n],"复活成功")
     return data
 
+# 以下为战斗函数
+# 切记要在编辑主战斗时备份一份data为olddata!!!
