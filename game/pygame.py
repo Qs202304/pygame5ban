@@ -23,11 +23,11 @@ def displayprocess(fplayer,splayer):
         # 再次用1-2随机数判断是自杀还是攻击
         expoint = random.randint(1, 2)
         if expoint == 1:
-            announce += "但是，自己也被击中了！失血100点"
-            onchange = -100
-        elif expoint == 2:
-            announce += "成功击中敌人！敌人直接毙命！"
+            announce += "但是，自己也被击中了！自杀了！"
             onchange = "die"
+        elif expoint == 2:
+            announce += "成功击中敌人！敌人直接扣100点！"
+            onchange = -100
         else:
             print("出错了！")
             return 0
