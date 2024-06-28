@@ -215,3 +215,5 @@ def easter(data,user,olddata):
 
 # 以下为战斗函数
 # 切记要在编辑主战斗时备份一份data为olddata!!!
+def mainfight(data,group):
+    
