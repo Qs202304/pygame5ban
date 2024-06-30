@@ -79,8 +79,7 @@ def changeval(data,type):
                 for i in range(6):
                     data[sup[i]] = randval(2)
                 for i in range(6):
-                    # 这里改为0
-                    data[magic[i]] = 0
+                    data[magic[i]] = randval(3)
                     
                 type += 1
     else:
@@ -128,14 +127,14 @@ def aliveshowandselect(data,group):
     for i in range(s):
         print(i,"：",t[2*i])
     n = int(input("请输入编号："))
-    number = t[n+1]
+    number = t[2*n+1]
     return number
 
 # ifisdead用于判定是否死亡，并将死亡队员改为Down
 def ifisdead(data):
     hp=[1,6,11,16,21,26]
     for i in hp:
-        if data[i] <= 0:
+        if int(data[i]) <= 0:
             if data[i-1] != "Down":
                 print(data[i-1],"队员死亡")
                 data[i-1] = "Down"
@@ -158,9 +157,13 @@ def magicatk(data,user):
     print("选择你的法术：")
     for i in range(count2):
         print(i,"：",available[2*i],"，消耗",available[2*i+1],"点法力")
-    n = int(input("请输入编号："))
-    if n>=0 and n<=count2:
-        return available[n+1]
+    noo = input("请输入编号（不存在按下回车）：")
+    if noo =="":
+        return "unselect"
+    else:
+        n = int(noo)
+        if n>=0 and n<=count2:
+            return available[2*n+1]
         
 # atkalive用于输出存活队员，并随机决定谁被攻击
 def atkalive(data,group):
@@ -218,10 +221,10 @@ def easter(data,user,olddata):
 def mainfight(data,group,olddata):
     fid = aliveshowandselect(data,group)
     fid = int(fid)
-    if group == "0":
-        sgroup = "1"
-    elif group == "1":
-        sgroup = "0"
+    if group == 0:
+        sgroup = 1
+    elif group == 1:
+        sgroup = 0
     else:
         print("非法")
     sid = atkalive(data,sgroup)
@@ -229,11 +232,12 @@ def mainfight(data,group,olddata):
     sname = data[sid]
     # point决定类型
     point = random.randint(1, 5)
+    print(data[fid+1])
     if point == 1:
-        announce = fname + "使用烟锤冲击，" + sname + "被击中了！失血"+data[fid+1]+"点"
+        announce = fname + "使用烟锤冲击，" + sname + "被击中了！失血"+str(data[fid+1])+"点"
         data[sid+1] = int(data[sid+1]) - int(data[fid+2])
     elif point == 2:
-        announce = fname + "使用脉冲轰炸，" + sname + "被击中了！失血"+data[fid+2]+"点"
+        announce = fname + "使用脉冲轰炸，" + sname + "被击中了！失血"+str(data[fid+2])+"点"
         data[sid+1] = int(data[sid+1]) - int(data[fid+3])
     elif point == 3:
         announce = fname + "看错了，使用了一记无用功，" + sname + "毫发无伤！"
@@ -241,7 +245,7 @@ def mainfight(data,group,olddata):
         announce = fname + "手下留情，没有使用招术，" + sname + "拱手感谢！"
     elif point == 5:
         announce = fname + "使出绝招，使用法术"
-        # 再次用1-2随机数判断是自杀还是攻击
+        # expoint决定法术类型
         expoint = magicatk(data,fid)
         if expoint == 15:
             announce += "火球术！"
@@ -257,11 +261,131 @@ def mainfight(data,group,olddata):
             data[fid+1] = int(data[fid+1]) + 100
         elif expoint == 30:
             announce += "冰冻术！"
+            data[30] = sgroup
+        elif expoint == "unselect":
+            announce += "但是法术点余额不足！刻苦修炼，获得新点数！"
+            dd = data[fid+4]
+            data[fid+4] = int(dd) + int(randval(3))
+            print("现在点数为："+str(data[fid+4]))
+            expoint = 0
         else:
             print("出错了！")
-            return 0
+            return data
+        data[fid+4] = int(data[fid+4]) - expoint
     else:
         print("出错了！")
-        return 0
+        return data
     print(announce)
+    return data
+
+# 主函数
+
+# 初始化
+data = []
+olddata = []
+
+data = readfile()
+olddata = data.copy()
+
+# 初始化结束
+while True:
+    # 游戏开始
+
+    print("欢迎来到游戏！")
+
+# 主界面
+    print("请选择操作：")
+    print("1.查看角色")
+    print("2.更改角色名")
+    print("3.保存角色")
+    print("4.读取角色")
+    print("5.战斗")
+    print("6.退出游戏")
+
+    # 游戏主循环
+    # 读取输入
+    inputtype = input("请输入选项：")
+    # 判断输入
+    if inputtype == "1":
+        # 显示角色
+        print("角色列表：")
+        for i in range(0,5):
+            print("角色"+data[i*5]+"：初始HP",data[i*5+1]+"，普通攻击",data[i*5+2]+"，高级攻击",data[i*5+3])
+        os.system("pause")
+
+    elif inputtype == "2":
+        data = changeval(data,1)
+        
+    elif inputtype == "3":
+        writefile(data)
+        
+    elif inputtype == "4":
+        data = readfile()
+        
+    elif inputtype == "5":
+        # 战斗
+        # 如果没有初始化，再一次！
+        if len(data) == 0:
+            data = range(0,30)
+            data = changeval(data,2)
+            olddata = data.copy()
+        # 战斗开始
+        data.append("")
+        group1name = input("请输入第一组的名字：")
+        group2name = input("请输入第二组的名字：")
+        print("战斗开始！")
+        count = 0
+        turn = 0
+        while ifalldead(data) == False:
+            data = ifisdead(data)
+            count += 1
+            print("第"+str(count)+"回合！")
+            if turn == 0:
+                if data[30] != 0:
+                    data = ifisdead(data)
+                    print("轮到"+group1name+"的回合！")
+                    data = mainfight(data,0,olddata)
+                    turn = 1
+                else:
+                    data = ifisdead(data)
+                    print(group1name+"本回合被冻结！")
+                    # 清除冻结（删除这个元素）
+                    data[30] = ""
+                    turn = 1
+            elif turn == 1:
+                if data[30] != 1:
+                    data = ifisdead(data)
+                    print("轮到"+group2name+"的回合！")
+                    data = mainfight(data,1,olddata)
+                    turn = 0
+                else:
+                    data = ifisdead(data)
+                    print(group2name+"本回合被冻结！")
+                    # 清除冻结（删除这个元素）
+                    data[30] = ""
+                    turn = 0
+        # 战斗结束
+        print("战斗结束！")
+        # 用ifalldead判断输赢
+        if ifalldead(data) == 0:
+            print(group2name+"胜利！")
+        elif ifalldead(data) == 1:
+            print(group1name+"胜利！")
+        else:
+            print("平局！")
+        # 重置数据
+        data = olddata.copy()
+        
+    elif inputtype == "6":
+        # 退出游戏
+        print("游戏退出！")
+        break
+    else:
+        print("无效的输入！")
+            
+
+
+
+
+
     
